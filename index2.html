@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script type="text/javascript" src="js/FB.js"></script>
+    <script type="text/javascript" src="js/birds.js"></script>
+    <script type="text/javascript" src="js/sky.js"></script>
+    <script type="text/javascript" src="js/land.js"></script>
+    <script type="text/javascript" src="js/pipe.js"></script>
+    <script type="text/javascript" src="js/game1.js"></script>
+    <script type="text/javascript">
+    onload = function() {
+        var cas = document.getElementById('cas');
+        var ctx = cas.getContext('2d');
+
+        var game = new FB.Game({
+            ctx : ctx
+        });
+        // game.init();
+
+    }
+    </script>
+</head>
+
+<body>
+    <canvas id="cas" width="800" height="600" style="border:solid blue 1px;"></canvas>
+</body>
+
+</html>

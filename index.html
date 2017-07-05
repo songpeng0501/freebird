@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script type="text/javascript" src="js/FB.js"></script>
+    <script type="text/javascript" src="js/birds.js"></script>
+    <script type="text/javascript" src="js/sky.js"></script>
+    <script type="text/javascript" src="js/land.js"></script>
+    <script type="text/javascript">
+    onload = function() {
+        var cas = document.getElementById('cas');
+        var ctx = cas.getContext('2d');
+
+        // 当前帧时间
+        var currentTime = 0;
+        // 上一帧时间
+        var lastTime = new Date();
+        // 两帧之间的时间间隔
+        var deltaTime = 0;
+
+        var arr = ['birds', 'sky', 'land', 'pipe1', 'pipe2'];
+        FB.loadImages(arr, function(imgs) {
+            var sky1 = new FB.Sky({
+                ctx: ctx,
+                img: imgs['sky'],
+                x: 0,
+                y: 0,
+                speed: 3
+            });
+            var sky2 = new FB.Sky({
+                ctx: ctx,
+                img: imgs['sky'],
+                x: imgs['sky'].width,
+                y: 0,
+                speed: 3
+            });
+
+            var land1 = new FB.Land({
+                ctx : ctx,
+                img : imgs['land'],
+                x : 0,
+                y : cas.height - imgs['land'].height,
+                speed : 3
+            });
+            var land2 = new FB.Land({
+                ctx : ctx,
+                img : imgs['land'],
+                x : imgs['land'].width,
+                y : cas.height - imgs['land'].height,
+                speed : 3
+            });
+            var land3 = new FB.Land({
+                ctx : ctx,
+                img : imgs['land'],
+                x : imgs['land'].width*2,
+                y : cas.height - imgs['land'].height,
+                speed : 3
+            });
+            var land4 = new FB.Land({
+                ctx : ctx,
+                img : imgs['land'],
+                x : imgs['land'].width*3,
+                y : cas.height - imgs['land'].height,
+                speed : 3
+            });
+
+            var bird = new FB.Bird({
+                ctx : ctx,
+                img : imgs['birds'],
+                x : 100,
+                y : 100,
+                speed : 0
+            });
+            
+            function render() {
+                // 清空画布
+                ctx.clearRect(0, 0, cas.width, cas.height);
+                // 计算相关时间
+                currentTime = new Date();
+                deltaTime = currentTime - lastTime;
+                lastTime = currentTime;
+                
+                sky1.draw();
+                sky2.draw();
+                land1.draw();
+                land2.draw();
+                land3.draw();
+                land4.draw();
+                bird.draw(deltaTime);
+                requestAnimationFrame(render);
+            }
+            render();
+        });
+        
+
+    }
+    </script>
+</head>
+
+<body>
+    <canvas id="cas" width="800" height="600" style="border:solid blue 1px;"></canvas>
+</body>
+
+</html>

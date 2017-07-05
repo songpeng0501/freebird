@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script type="text/javascript" src="js/FB.js"></script>
+    <script type="text/javascript" src="js/birds.js"></script>
+    <script type="text/javascript" src="js/sky.js"></script>
+    <script type="text/javascript" src="js/land.js"></script>
+    <script type="text/javascript" src="js/pipe.js"></script>
+    <script type="text/javascript">
+    onload = function() {
+        var cas = document.getElementById('cas');
+        var ctx = cas.getContext('2d');
+
+        // 当前帧时间
+        var currentTime = 0;
+        // 上一帧时间
+        var lastTime = new Date();
+        // 两帧之间的时间间隔
+        var deltaTime = 0;
+
+        var roles = [];
+
+        var hero = null;
+        var isRunnig = true;
+
+        var arr = ['birds', 'sky', 'land', 'pipe1', 'pipe2'];
+        FB.loadImages(arr, function(imgs) {
+            // 初始化蓝天
+            for (var i = 0; i < 2; i++) {
+                var sky = new FB.Sky({
+                    ctx: ctx,
+                    img: imgs['sky'],
+                    x: imgs['sky'].width * i,
+                    y: 0,
+                    speed: 3
+                });
+                roles.push(sky);
+            }
+            // 初始化管道
+            for (var i = 0; i < 6; i++) {
+                var pipe = new FB.Pipe({
+                    ctx : ctx,
+                    topImg : imgs['pipe2'],
+                    bottomImg : imgs['pipe1'],
+                    x : imgs['pipe2'].width * 3 * i + 300,
+                    speed : 3,
+                    spaceHeight : 200
+                });
+                roles.push(pipe);
+            }
+            // 初始化陆地
+            for (var i = 0; i < 4; i++) {
+                var land = new FB.Land({
+                    ctx : ctx,
+                    img : imgs['land'],
+                    x : imgs['land'].width * i,
+                    y : cas.height - imgs['land'].height,
+                    speed : 3
+                });
+                roles.push(land);
+            }
+            // 初始化小鸟
+            var bird = new FB.Bird({
+                ctx : ctx,
+                img : imgs['birds'],
+                x : 100,
+                y : 100,
+                speed : 0
+            });
+            roles.push(bird);
+            hero = bird;
+            cas.onclick = function(){
+                bird.speed = - 0.3;
+            }
+            
+            function render() {
+                // 清空画布
+                ctx.clearRect(0, 0, cas.width, cas.height);
+                // 计算相关时间
+                currentTime = new Date();
+                deltaTime = currentTime - lastTime;
+                lastTime = currentTime;
+
+                ctx.beginPath();
+                roles.forEach(function(v){
+                    v.draw(deltaTime);
+                });
+                // ctx.fill();
+                // 控制上下边界
+                if(hero.y  < 0 || hero.y + hero.perHeight > cas.height - imgs['land'].height){
+                    isRunnig = false;
+                }
+                // 控制小鸟和管子的碰撞
+                if(ctx.isPointInPath(hero.x+hero.perWidth,hero.y+hero.perHeight)){
+                    isRunnig = false;
+                }
+                if(isRunnig){
+                    requestAnimationFrame(render);
+                }
+            }
+            render();
+        });
+        
+
+    }
+    </script>
+</head>
+
+<body>
+    <canvas id="cas" width="800" height="600" style="border:solid blue 1px;"></canvas>
+</body>
+
+</html>
