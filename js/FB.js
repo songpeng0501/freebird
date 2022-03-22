@@ -21,7 +21,7 @@
     //     return objList;
     // }
 
-    FB.loadImages = function(srcList,callback,obj){
+    FB.loadImages = function(srcList,callback){
         var count = 0;
         var objList = {};
         srcList.forEach(function(v){
@@ -33,7 +33,7 @@
                 if(count === srcList.length){
                     // 所有图片加载完成之后处理后续操作
                     // callback(objList);
-                    callback.call(obj);
+                    callback(objList);
                 }
             }
         });
